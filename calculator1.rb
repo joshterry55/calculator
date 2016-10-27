@@ -7,7 +7,7 @@
 #result should set first_number and allow for another modifier and last number so result continues to build until the user decides to clear the calculator
 #- make + - * / work
 #- make clear work
-calculating = true
+
 
 
 puts "WELCOME TO RUBY CALCULATOR"
@@ -37,7 +37,7 @@ end
 
 def mod1
   puts "Input modifier (+, -, *, or /)"
-  modifier = gets.strip
+  modifier = gets.strip.downcase
   case modifier
   when "+"
     "+"
@@ -53,16 +53,22 @@ def mod1
   end
 end
 
+
+
 def calculate(x, y, z)
   case y
   when "+"
     puts "#{x} + #{z} = #{x + z}"
+    x + z
   when "-"
     puts "#{x} - #{z} = #{x - z}"
+    x - z
   when "*"
     puts "#{x} * #{z} = #{x * z}"
+    x * z
   when "/"
     puts "#{x} / #{z} = #{x / z}"
+    x / z
   end
 
 end
@@ -81,12 +87,48 @@ def menu_selection
   end
 end
 
-while calculating
-  main_menu
-  menu_selection
-  number1 = num1()
-  modifier = mod1()
-  number2 = num2(modifier)
-  calculate(number1, modifier, number2)
-
+def continuing(first_answer)
+  puts "\nLast answer was #{first_answer}."
+  puts "Input modifier (+, -, *, / or clear)"
+  new_modifier = gets.strip.downcase
+  case new_modifier
+  when "+", "-", "*", "/"
+  when "clear"
+    run_calc
+  else
+    puts "Invalid Modifer"
+    continuing(first_answer)
+  end
+  print "Enter another number: "
+  new_number = gets.strip.to_f
+  case new_modifier
+  when "+"
+    puts "#{first_answer} + #{new_number} = #{first_answer + new_number}"
+    new_answer = first_answer + new_number
+  when "-"
+    puts "#{first_answer} - #{new_number} = #{first_answer - new_number}"
+    new_answer = first_answer - new_number
+  when "*"
+    puts "#{first_answer} * #{new_number} = #{first_answer * new_number}"
+    new_answer = first_answer + new_number
+  when "/"
+    puts "#{first_answer} / #{new_number} = #{first_answer / new_number}"
+    new_answer = first_answer / new_number
+  end
+  continuing(new_answer)
 end
+
+def run_calc
+  while true
+    main_menu
+    menu_selection
+    number1 = num1()
+    modifier = mod1()
+    number2 = num2(modifier)
+    #calculate(number1, modifier, number2)
+    continuing(calculate(number1, modifier, number2))
+
+  end
+end
+
+run_calc
